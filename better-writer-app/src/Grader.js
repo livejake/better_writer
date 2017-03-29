@@ -10,7 +10,11 @@ export default function Grader(props) {
       return parseFloat(n)
     })
     const gradeIndex = xg_boost.indexOf(Math.max.apply(null, xg_boost))
+    const gradePercents = xg_boost.map(n => {  
+      return n * 100
+    })
 
+    const grades = ['NC','F','D','C','B','A','A+']
     //mcClass
     const mcClassListStartText = 'Your essay is about the following topics: '
     
@@ -47,9 +51,20 @@ export default function Grader(props) {
       }
     })
 
+    let word_percents = grades.map((item, i ) => {
+
+          return <li key={i}>{item} : { Math.round(gradePercents[i],-1)}</li>
+
+
+    })
+
     return(
       <div>
         <h1> Mr.Meow, the robotic English teaching cat, has read through your essay and has determined you should receive {grade[gradeIndex]}</h1>
+        <h2> Here's how your grade probabilities breakdown </h2> 
+        <ul> 
+            {word_percents}
+        </ul>
         <h2> Here's some facts about your writing </h2>
         <ul>
         {showMcClass && <li>{mcClassList}</li>}
