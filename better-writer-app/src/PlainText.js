@@ -3,12 +3,8 @@ import {Editor, EditorState, RichUtils} from 'draft-js';
 import Grader from './Grader'
 import Timer from './Timer'
 import './App.css'
-
-const essays = {
-  'essay1': 'what is the best ?',
-  'essay2': 'asdasdasdasdasdasdasdasdasd',
-  'essay3': 'what is the best ?'
-}
+import essays from './essays.js'
+import nl2br from 'react-nl2br'
 
 // Custom overrides for "code" style.
 const styleMap = {
@@ -68,11 +64,18 @@ class PlainText extends React.Component {
   }
 
   _handleAnalyzeText = () => {
-    let text = this.state.editorState.getCurrentContent().getPlainText()
+    let text = this.state.editorState.getCurrentContent().getPlainText();
     // console.log(text)
+    let essaySet = parseInt(this.props.essay.match(/\d+$/)[0], 10);
     fetch('http://localhost:5000/api/', {
       method: "POST",
-      body: text
+      headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },  body: JSON.stringify({
+    text: text,
+    essaySet: essaySet
+  })
     })
     .then(response =>{
       return response.json()
@@ -133,8 +136,8 @@ class PlainText extends React.Component {
       <div>
         <Timer />
         <h1>{this.props.essay}</h1>
-        <p>{essays[this.props.essay]}</p>
-        <div className="RichEditor-root">
+        <div>{nl2br(essays[this.props.essay])}</div>
+        <div className="RichEditor-root" style={{marginTop: 15}}>
           <BlockStyleControls
             editorState={editorState}
             onToggle={this.toggleBlockType}
@@ -143,21 +146,21 @@ class PlainText extends React.Component {
             editorState={editorState}
             onToggle={this.toggleInlineStyle}
           />
-          <div className={className} onClick={this.focus}>
-            <Editor
-              blockStyleFn={getBlockStyle}
-              customStyleMap={styleMap}
-              editorState={editorState}
-              handleKeyCommand={this.handleKeyCommand}
-              onChange={this.onChange}
-              onTab={this.onTab}
-              placeholder="Tell a story..."
-              ref="editor"
-              spellCheck={true}
-            />
-          </div>
+            <div className={className} onClick={this.focus}>
+              <Editor
+                blockStyleFn={getBlockStyle}
+                customStyleMap={styleMap}
+                editorState={editorState}
+                handleKeyCommand={this.handleKeyCommand}
+                onChange={this.onChange}
+                onTab={this.onTab}
+                placeholder="Write your essay here..."
+                ref="editor"
+                spellCheck={true}
+              />
+            </div>
         </div>
-        <button onClick={this._handleAnalyzeText}>Grade Me</button>
+        <button style={{marginTop: 15}} className="btn btn-success" onClick={this._handleAnalyzeText}>Grade Me</button>
         {analysisKeys.length > 0 && <Grader analysisKeys={analysisKeys} analysis={analysis}/>}
       </div>     
     );

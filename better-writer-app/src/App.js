@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom'
 
 import PlainText from './PlainText.js'
-
+import essays from './essays'
+import Technical from './Technical'
 export default class App extends Component{
   
   constructor(props){
@@ -17,18 +18,29 @@ export default class App extends Component{
   render(){
     return(
       <Router>
-        <div>
-          <ul>
-            <li><Link to="/">Pick An Essay Topic</Link></li>
-          </ul>
+        <div >
+          <nav className="navbar navbar-default">
+          <div className="container-fluid">
+              <div className="navbar-header">
+                  <img height='50' width='50' src="cat_image.gif"></img>
+                  <a className="navbar-brand" href="/">Mr. Meows Magical Essay Grader</a>
+             </div>
+          <ul className="nav navbar-nav">
 
+              <li className="active"><Link to="/">Home</Link> </li>
+              <li><Link to="/technical">Technical Info</Link> </li> 
+          </ul>
+          </div>
+
+            </nav>
           <hr/>
           <Switch>
             <Route exact path="/" component={PickAnEssay}/>
+            <Route exact path="/technical" component={Technical}/>
             <Route exact path="/:essay" 
               render={props => {
-                const essay = props.match.url.replace('/', '')
-                return <PlainText essay={essay}/>
+                const essayNum = props.match.url.replace('/', '').replace("essay","")
+                return <PlainText essay={essayNum}/>
               }
             }/>
           </Switch>
@@ -38,11 +50,17 @@ export default class App extends Component{
   }
 }
 
+function createEssayRoutes(essays){
+  return Object.keys(essays).map( essay => {
+    return <li><Link to={`/${essay}`}>{essay}</Link></li>
+  })
+}
+
 const PickAnEssay = () => (
   <div>
-    <h1>PickAnEssay</h1>
-     <li><Link to="/essay1">Essay 1</Link></li>
-     <li><Link to="/essay2">Essay 2</Link></li>
-     <li><Link to="/essay3">Essay 3</Link></li>
+    <h1>Pick your Essay</h1>
+    <p>Below are a set of eight essays you can use to practice your writing. Try one!</p>
+     {createEssayRoutes(essays)}
   </div>
 )
+
