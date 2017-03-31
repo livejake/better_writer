@@ -105,13 +105,17 @@ def get_features_from_text(text,essay_id):
 
 @app.route("/api/",methods=['POST'])
 def analyze():
-     text = str(request.data)
+     content = request.get_json(silent=True)
+     print content
+     text=content['text']
+     essay_set = content['essaySet']
      xg_features= get_features_from_text(text,1)
+     print xg_features.shape
      xg_predicts = xgb_model(xg_features)
      xg_vals= xg_predicts.iloc[0].tolist()
-     xg_vals = map(str,xg_vals )
+     xg_vals = map(lambda x: str(round(x,2)),xg_vals )
      xg_columns= xg_predicts.columns
-     xg_predicts=zip(xg_columns,xg_vals)
+     xg_predicts=xg_vals[0:7]
      data ={}
      text_funcs = [textstat.flesch_reading_ease,textstat.smog_index,
      textstat.flesch_kincaid_grade,textstat.flesch_kincaid_grade,textstat.flesch_kincaid_grade,
