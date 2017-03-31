@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
-  Route,
+  BrowserRouter as Router, 
+  Route, 
   Link,
   Switch
 } from 'react-router-dom'
@@ -19,7 +19,7 @@ export default class App extends Component{
     return(
       <Router>
         <div >
-          <nav className="navbar navbar-default">
+          <nav className="navbar navbar-default ">
           <div className="container-fluid">
               <div className="navbar-header">
                   <img height='50' width='50' src="cat_image.gif"></img>

@@ -10,6 +10,7 @@
     "react-dom": "^15.4.2",
     "react-nl2br": "^0.2.0",
     "react-router-dom": "^4.0.0",
+    "react-tooltip": "^3.2.10",
     "semantic-ui-react": "^0.67.2"
   },
   "devDependencies": {

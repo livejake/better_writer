@@ -39,7 +39,6 @@ export default function Grader(props) {
 
 
 
-    console.log('mcClassList', mcClassList)
 
     //not checking for nested objects
     let data = analysisKeys.map( (item, i ) => {
@@ -51,7 +50,7 @@ export default function Grader(props) {
       }
     })
 
-    let word_percents = grades.map((item, i ) => {
+    let wordPercents = grades.map((item, i ) => {
 
           return <li key={i}>{item} : { Math.round(gradePercents[i],-1)}</li>
 
@@ -63,7 +62,7 @@ export default function Grader(props) {
         <h1> Mr.Meow, the robotic English teaching cat, has read through your essay and has determined you should receive {grade[gradeIndex]}</h1>
         <h2> Here's how your grade probabilities breakdown </h2> 
         <ul> 
-            {word_percents}
+            {wordPercents}
         </ul>
         <h2> Here's some facts about your writing </h2>
         <ul>

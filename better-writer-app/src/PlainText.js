@@ -64,7 +64,8 @@ class PlainText extends React.Component {
   }
 
   _handleAnalyzeText = () => {
-    let text = this.state.editorState.getCurrentContent().getPlainText();
+    let text = this.state.editorState.getCurrentContent().getPlainText().replace(/[^\x00-\x7F]/g, "");
+
     // console.log(text)
     let essaySet = parseInt(this.props.essay.match(/\d+$/)[0], 10);
     fetch('http://localhost:5000/api/', {
@@ -134,10 +135,9 @@ class PlainText extends React.Component {
 
     return (
       <div>
-        <Timer />
         <h1>{this.props.essay}</h1>
         <div>{nl2br(essays[this.props.essay])}</div>
-        <div className="RichEditor-root" style={{marginTop: 15}}>
+        <div className="RichEditor-root" style={{marginTop: 15, marginBottom:15}}>
           <BlockStyleControls
             editorState={editorState}
             onToggle={this.toggleBlockType}
@@ -160,9 +160,13 @@ class PlainText extends React.Component {
               />
             </div>
         </div>
-        <button style={{marginTop: 15}} className="btn btn-success" onClick={this._handleAnalyzeText}>Grade Me</button>
+         <Timer/>
+
+        <button style={{marginTop: 15, marginBottom:15}} className="btn btn-success" onClick={this._handleAnalyzeText}>Grade Me</button>
         {analysisKeys.length > 0 && <Grader analysisKeys={analysisKeys} analysis={analysis}/>}
-      </div>     
+
+      </div>  
+
     );
   }
 }
@@ -177,7 +181,6 @@ const BLOCK_TYPES = [
   {label: 'Blockquote', style: 'blockquote'},
   {label: 'UL', style: 'unordered-list-item'},
   {label: 'OL', style: 'ordered-list-item'},
-  {label: 'Code Block', style: 'code-block'},
 ];
 
 const BlockStyleControls = (props) => {
